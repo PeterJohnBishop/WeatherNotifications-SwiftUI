@@ -23,13 +23,25 @@ struct ListUserDataView: View {
     
     var body: some View {
         NavigationStack {
-            List {
+            ScrollView {
                 ForEach(users) { user in
                     VStack(alignment: .leading) {
-                        Text(user.name)
-                            .font(.headline)
-                        Text(user.email)
-                    }
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                modelContext.delete(user)
+                            }, label: {
+                                Image(systemName: "trash.fill").tint(.red)
+                            }).frame(width: 30)
+                        }
+                        GroupBox(content: {
+                            Text(user.email)
+                        }, label: {
+                            Text(user.name)
+                        })
+                    }.padding()
+                    
+                    
                 }
             }
             .navigationTitle("All Users")

@@ -13,6 +13,6 @@ struct ideal_gogglesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-        }.modelContainer(for: [UserData.self])
+        }.modelContainer(for: [UserData.self, AlarmData.self])
     }
 }
