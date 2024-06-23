@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B149B8F62C1FB17700B838FF /* UserDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B8F52C1FB17700B838FF /* UserDataModel.swift */; };
-		B149B8F82C1FB22800B838FF /* ListUserDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B8F72C1FB22800B838FF /* ListUserDataView.swift */; };
 		B149B8FA2C1FF30F00B838FF /* DialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B8F92C1FF30F00B838FF /* DialView.swift */; };
 		B149B8FC2C1FF44F00B838FF /* NeumorphicStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B8FB2C1FF44F00B838FF /* NeumorphicStyle.swift */; };
-		B149B9002C24EBF400B838FF /* AlarmDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B8FF2C24EBF400B838FF /* AlarmDataModel.swift */; };
-		B149B9022C24ECAB00B838FF /* TemperatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B9012C24ECAA00B838FF /* TemperatureView.swift */; };
+		B149B9042C2645CD00B838FF /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B9032C2645CD00B838FF /* LocationManager.swift */; };
+		B149B9072C264AB900B838FF /* NotificationDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B9062C264AB900B838FF /* NotificationDataModel.swift */; };
+		B149B9092C264B2C00B838FF /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B9082C264B2C00B838FF /* NotificationViewModel.swift */; };
+		B149B90B2C27E2EB00B838FF /* CircularGlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B90A2C27E2EB00B838FF /* CircularGlow.swift */; };
+		B149B90D2C27E32800B838FF /* Dial.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B90C2C27E32800B838FF /* Dial.swift */; };
 		B1D62AE12C1EAF3800CD3818 /* ideal_gogglesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D62AE02C1EAF3800CD3818 /* ideal_gogglesApp.swift */; };
 		B1D62AE32C1EAF3800CD3818 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D62AE22C1EAF3800CD3818 /* ContentView.swift */; };
 		B1D62AE52C1EAF3900CD3818 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1D62AE42C1EAF3900CD3818 /* Assets.xcassets */; };
@@ -20,12 +21,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B149B8F52C1FB17700B838FF /* UserDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataModel.swift; sourceTree = "<group>"; };
-		B149B8F72C1FB22800B838FF /* ListUserDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListUserDataView.swift; sourceTree = "<group>"; };
 		B149B8F92C1FF30F00B838FF /* DialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialView.swift; sourceTree = "<group>"; };
 		B149B8FB2C1FF44F00B838FF /* NeumorphicStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeumorphicStyle.swift; sourceTree = "<group>"; };
-		B149B8FF2C24EBF400B838FF /* AlarmDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmDataModel.swift; sourceTree = "<group>"; };
-		B149B9012C24ECAA00B838FF /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
+		B149B9032C2645CD00B838FF /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		B149B9062C264AB900B838FF /* NotificationDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDataModel.swift; sourceTree = "<group>"; };
+		B149B9082C264B2C00B838FF /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
+		B149B90A2C27E2EB00B838FF /* CircularGlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularGlow.swift; sourceTree = "<group>"; };
+		B149B90C2C27E32800B838FF /* Dial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dial.swift; sourceTree = "<group>"; };
 		B1D62ADD2C1EAF3800CD3818 /* ideal-goggles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ideal-goggles.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1D62AE02C1EAF3800CD3818 /* ideal_gogglesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ideal_gogglesApp.swift; sourceTree = "<group>"; };
 		B1D62AE22C1EAF3800CD3818 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +46,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B149B9052C26486D00B838FF /* style */ = {
+			isa = PBXGroup;
+			children = (
+				B149B90C2C27E32800B838FF /* Dial.swift */,
+				B149B90A2C27E2EB00B838FF /* CircularGlow.swift */,
+				B149B8FB2C1FF44F00B838FF /* NeumorphicStyle.swift */,
+			);
+			path = style;
+			sourceTree = "<group>";
+		};
 		B1D62AD42C1EAF3800CD3818 = {
 			isa = PBXGroup;
 			children = (
@@ -64,13 +76,12 @@
 			isa = PBXGroup;
 			children = (
 				B1D62AE02C1EAF3800CD3818 /* ideal_gogglesApp.swift */,
-				B149B8F72C1FB22800B838FF /* ListUserDataView.swift */,
 				B1D62AE22C1EAF3800CD3818 /* ContentView.swift */,
-				B149B9012C24ECAA00B838FF /* TemperatureView.swift */,
+				B149B9032C2645CD00B838FF /* LocationManager.swift */,
+				B149B9062C264AB900B838FF /* NotificationDataModel.swift */,
+				B149B9082C264B2C00B838FF /* NotificationViewModel.swift */,
 				B149B8F92C1FF30F00B838FF /* DialView.swift */,
-				B149B8FB2C1FF44F00B838FF /* NeumorphicStyle.swift */,
-				B149B8F52C1FB17700B838FF /* UserDataModel.swift */,
-				B149B8FF2C24EBF400B838FF /* AlarmDataModel.swift */,
+				B149B9052C26486D00B838FF /* style */,
 				B1D62AE42C1EAF3900CD3818 /* Assets.xcassets */,
 				B1D62AE62C1EAF3900CD3818 /* Preview Content */,
 			);
@@ -155,13 +166,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B149B9072C264AB900B838FF /* NotificationDataModel.swift in Sources */,
 				B149B8FA2C1FF30F00B838FF /* DialView.swift in Sources */,
-				B149B9022C24ECAB00B838FF /* TemperatureView.swift in Sources */,
-				B149B8F62C1FB17700B838FF /* UserDataModel.swift in Sources */,
-				B149B8F82C1FB22800B838FF /* ListUserDataView.swift in Sources */,
 				B1D62AE32C1EAF3800CD3818 /* ContentView.swift in Sources */,
+				B149B90B2C27E2EB00B838FF /* CircularGlow.swift in Sources */,
+				B149B90D2C27E32800B838FF /* Dial.swift in Sources */,
+				B149B9042C2645CD00B838FF /* LocationManager.swift in Sources */,
+				B149B9092C264B2C00B838FF /* NotificationViewModel.swift in Sources */,
 				B1D62AE12C1EAF3800CD3818 /* ideal_gogglesApp.swift in Sources */,
-				B149B9002C24EBF400B838FF /* AlarmDataModel.swift in Sources */,
 				B149B8FC2C1FF44F00B838FF /* NeumorphicStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
