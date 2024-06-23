@@ -10,7 +10,7 @@ import Observation
 import CoreLocation
 
 @Observable class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
-    var location: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    var location: CLLocationCoordinate2D?
     var degrees: Double = 0
     var authStatus: CLAuthorizationStatus = .notDetermined
     var success: Bool = false
@@ -24,7 +24,7 @@ import CoreLocation
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        location = locations.first!.coordinate
+        location = locations.first?.coordinate
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -41,5 +41,6 @@ import CoreLocation
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         degrees = newHeading.trueHeading
     }
+    
     
 }

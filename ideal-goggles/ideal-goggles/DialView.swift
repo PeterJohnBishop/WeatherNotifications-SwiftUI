@@ -18,8 +18,8 @@ struct DialView: View {
     @State var screenWidth: Double = 0.0;
     @State var screenHeight: Double = 0.0;
     @State var dialValue: CGFloat = 0.0;
-    @State var unlock: Bool = false;
-    @State var unlockSuccess: Bool = false;
+    @State var notifSheetList: Bool = false
+    @State var toggleC: Bool = false;
     @State var statusColor: Color = .gray.opacity(0.8)
     @State var location: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
 
@@ -40,7 +40,10 @@ struct DialView: View {
                     Text(notificationViewModel.notif.address).fontWeight(.ultraLight)
                         }
                         .onAppear {
+                            let location = locationManager.requestLocation()
                             Task {
+                                notificationViewModel.notif.lat = location.coordinate.latitude
+                                notificationViewModel.notif.long = location.coordinate.longitude
                                 notificationViewModel.reverseGeocoding()
                                 await weatherManager.getWeather(lat: notificationViewModel.notif.lat,
                                                                 long: notificationViewModel.notif.long)
@@ -68,7 +71,8 @@ struct DialView: View {
                     })
                 }.padding()
                 Button(action: {
-                    modelContext.insert(notificationViewModel.notif)
+                    let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false)
+                    modelContext.insert(save)
                 }, label: {
                     HStack{
                         Text("+")
@@ -76,29 +80,97 @@ struct DialView: View {
                     }
                 }).buttonStyle(NeumorphicButton(shape: RoundedRectangle(cornerRadius: 10)))
                     .padding()
-                ScrollView {
-                    ForEach(allNotifs) { notif in
-                        VStack(alignment: .leading) {
-                            GroupBox(content: {
-                                HStack{
-                                    Text("Denver, CO")
-                                    Spacer()
-                                    Button(action: {
-                                        modelContext.delete(notif)
-                                    }, label: {
-                                        Image(systemName: "xmark.circle.fill").tint(.black)
-                                    }).frame(width: 30)
-                                }
-                            }, label: {
-                                notificationViewModel.notif.celcius ?
-                                Text("\((notif.temp * 120)/100, specifier: "%.0f")° C") :
-                                Text("\((notif.temp * 120)/100, specifier: "%.0f")° F")
-                            })
-                        }.padding()
-                        
-                        
+                if(allNotifs.isEmpty)
+                {
+                    VStack{
+                        Text("")
+                        Spacer()
                     }
+                } else {
+                    GroupBox(content: {
+                        ScrollView {
+                            ForEach(allNotifs) { notif in
+                                VStack(alignment: .leading) {
+                                    GroupBox(content: {
+                                        HStack{
+                                            Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                                                notif.active ?
+                                                Image(systemName: "bell.badge.fill").tint(.black) :
+                                                Image(systemName: "bell.slash.fill").tint(.black)
+                                            })
+                                            Text(notif.address).fontWeight(.ultraLight)
+                                            Spacer()
+                                        }
+                                    }, label: {
+                                        HStack{
+                                            notificationViewModel.notif.celcius ?
+                                            Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° C") :
+                                            Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° F")
+                                            Spacer()
+                                            Button(action: {
+                                                modelContext.delete(notif)
+                                            }, label: {
+                                                Image(systemName: "minus").tint(.black)
+                                            })
+                                        }
+                                    })
+                                }.padding()
+                                
+                                
+                            }
+                        }
+                    }, label: {
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                notifSheetList = true
+                            }, label: {
+                                Image(systemName: "list.bullet").tint(.black)
+                            }).sheet(isPresented: $notifSheetList, content: {
+                                VStack{
+                                    Button(action: {
+                                        notifSheetList = false
+                                    }, label: {
+                                        Image(systemName: "chevron.down").tint(.black)
+                                            .padding()
+                                    })
+                                    ScrollView {
+                                        ForEach(allNotifs) { notif in
+                                            VStack(alignment: .leading) {
+                                                GroupBox(content: {
+                                                    HStack{
+                                                        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                                                            notif.active ?
+                                                            Image(systemName: "bell.badge.fill").tint(.black) :
+                                                            Image(systemName: "bell.slash.fill").tint(.black)
+                                                        })
+                                                        Text(notif.address).fontWeight(.ultraLight)
+                                                        Spacer()
+                                                    }
+                                                }, label: {
+                                                    HStack{
+                                                        notificationViewModel.notif.celcius ?
+                                                        Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° C") :
+                                                        Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° F")
+                                                        Spacer()
+                                                        Button(action: {
+                                                            modelContext.delete(notif)
+                                                        }, label: {
+                                                            Image(systemName: "minus").tint(.black)
+                                                        })
+                                                    }
+                                                })
+                                            }.padding()
+                                        }
+                                    }
+                                }
+                            })
+                        }
+                    })
+                    .clipShape(RoundedRectangle(cornerSize: CGSize(width: 20, height: 20)))
                 }
+
+          
                 
 //
             }
