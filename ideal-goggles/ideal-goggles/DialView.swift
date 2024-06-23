@@ -12,7 +12,9 @@ import MapKit
 struct DialView: View {
     @Query var allNotifs: [NotificationData]
     @Environment(\.modelContext) var modelContext
-    @State private var viewModel: NotificationView = NotificationView()
+    @State private var notificationViewModel: NotificationView = NotificationView()
+    @State private var weatherManager = WeatherManager()
+    @State private var locationManager = LocationManager()
     @State var screenWidth: Double = 0.0;
     @State var screenHeight: Double = 0.0;
     @State var dialValue: CGFloat = 0.0;
@@ -25,10 +27,29 @@ struct DialView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
+                VStack(spacing: 12) {
+                    Spacer()
+
+                            Image(systemName: weatherManager.icon)
+                                .font(.largeTitle)
+                                .shadow(radius: 2)
+                                .padding()
+                    notificationViewModel.notif.celcius ?
+                    Text("Currently, \(weatherManager.temperatureC) in").fontWeight(.bold) :
+                    Text("Currently, \(weatherManager.temperatureF) in").fontWeight(.bold)
+                    Text(notificationViewModel.notif.address).fontWeight(.ultraLight)
+                        }
+                        .onAppear {
+                            Task {
+                                notificationViewModel.reverseGeocoding()
+                                await weatherManager.getWeather(lat: notificationViewModel.notif.lat,
+                                                                long: notificationViewModel.notif.long)
+                            }
+                        }
                     ZStack {
                     Background(isPressed: false, shape: Circle()).frame(width: 300, height: 300)
                     GlowTile_Circular(ringColor: statusColor)
-                    Dial(dialValue: $dialValue).onChange(of: dialValue, {
+                        Dial(dialValue: $dialValue, celsius: $notificationViewModel.notif.celcius).onChange(of: dialValue, {
                         if (dialValue > 0 && dialValue < 10) {
                             statusColor = Color.white.opacity(0.8)
                         } else if (dialValue > 10 && dialValue < 32) {
@@ -47,10 +68,7 @@ struct DialView: View {
                     })
                 }.padding()
                 Button(action: {
-//                    let alarm = AlarmData(id: UUID().uuidString, temp: dialValue, long: 0.0, lat: 0.0, address: "", celcius: false, active: true, alert: false)
-//                    modelContext.insert(alarm)
-                    let notification = NotificationData(id: UUID().uuidString, name: "myAlarm", temp: dialValue, long: 0.0, lat: 0.0, address: "123 LoFi Lane, Denver, CO 80207", celcius: false, active: true, alert: false)
-                    modelContext.insert(notification)
+                    modelContext.insert(notificationViewModel.notif)
                 }, label: {
                     HStack{
                         Text("+")
@@ -58,7 +76,6 @@ struct DialView: View {
                     }
                 }).buttonStyle(NeumorphicButton(shape: RoundedRectangle(cornerRadius: 10)))
                     .padding()
-                Spacer()
                 ScrollView {
                     ForEach(allNotifs) { notif in
                         VStack(alignment: .leading) {
@@ -69,12 +86,13 @@ struct DialView: View {
                                     Button(action: {
                                         modelContext.delete(notif)
                                     }, label: {
-                                            Image(systemName: "trash.fill").tint(.red)
-                                            
+                                        Image(systemName: "xmark.circle.fill").tint(.black)
                                     }).frame(width: 30)
                                 }
                             }, label: {
-                                Text("\((notif.temp * 120)/100, specifier: "%.0f") °F")
+                                notificationViewModel.notif.celcius ?
+                                Text("\((notif.temp * 120)/100, specifier: "%.0f")° C") :
+                                Text("\((notif.temp * 120)/100, specifier: "%.0f")° F")
                             })
                         }.padding()
                         

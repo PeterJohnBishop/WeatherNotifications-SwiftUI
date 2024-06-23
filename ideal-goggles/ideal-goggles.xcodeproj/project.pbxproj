@@ -14,6 +14,7 @@
 		B149B9092C264B2C00B838FF /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B9082C264B2C00B838FF /* NotificationViewModel.swift */; };
 		B149B90B2C27E2EB00B838FF /* CircularGlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B90A2C27E2EB00B838FF /* CircularGlow.swift */; };
 		B149B90D2C27E32800B838FF /* Dial.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B90C2C27E32800B838FF /* Dial.swift */; };
+		B149B90F2C28654100B838FF /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B90E2C28654100B838FF /* WeatherManager.swift */; };
 		B1D62AE12C1EAF3800CD3818 /* ideal_gogglesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D62AE02C1EAF3800CD3818 /* ideal_gogglesApp.swift */; };
 		B1D62AE32C1EAF3800CD3818 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D62AE22C1EAF3800CD3818 /* ContentView.swift */; };
 		B1D62AE52C1EAF3900CD3818 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1D62AE42C1EAF3900CD3818 /* Assets.xcassets */; };
@@ -28,6 +29,8 @@
 		B149B9082C264B2C00B838FF /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		B149B90A2C27E2EB00B838FF /* CircularGlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularGlow.swift; sourceTree = "<group>"; };
 		B149B90C2C27E32800B838FF /* Dial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dial.swift; sourceTree = "<group>"; };
+		B149B90E2C28654100B838FF /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
+		B149B9102C28671200B838FF /* ideal-goggles.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ideal-goggles.entitlements"; sourceTree = "<group>"; };
 		B1D62ADD2C1EAF3800CD3818 /* ideal-goggles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ideal-goggles.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1D62AE02C1EAF3800CD3818 /* ideal_gogglesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ideal_gogglesApp.swift; sourceTree = "<group>"; };
 		B1D62AE22C1EAF3800CD3818 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -75,12 +78,14 @@
 		B1D62ADF2C1EAF3800CD3818 /* ideal-goggles */ = {
 			isa = PBXGroup;
 			children = (
+				B149B9102C28671200B838FF /* ideal-goggles.entitlements */,
 				B1D62AE02C1EAF3800CD3818 /* ideal_gogglesApp.swift */,
 				B1D62AE22C1EAF3800CD3818 /* ContentView.swift */,
 				B149B9032C2645CD00B838FF /* LocationManager.swift */,
 				B149B9062C264AB900B838FF /* NotificationDataModel.swift */,
 				B149B9082C264B2C00B838FF /* NotificationViewModel.swift */,
 				B149B8F92C1FF30F00B838FF /* DialView.swift */,
+				B149B90E2C28654100B838FF /* WeatherManager.swift */,
 				B149B9052C26486D00B838FF /* style */,
 				B1D62AE42C1EAF3900CD3818 /* Assets.xcassets */,
 				B1D62AE62C1EAF3900CD3818 /* Preview Content */,
@@ -168,6 +173,7 @@
 			files = (
 				B149B9072C264AB900B838FF /* NotificationDataModel.swift in Sources */,
 				B149B8FA2C1FF30F00B838FF /* DialView.swift in Sources */,
+				B149B90F2C28654100B838FF /* WeatherManager.swift in Sources */,
 				B1D62AE32C1EAF3800CD3818 /* ContentView.swift in Sources */,
 				B149B90B2C27E2EB00B838FF /* CircularGlow.swift in Sources */,
 				B149B90D2C27E32800B838FF /* Dial.swift in Sources */,
@@ -305,6 +311,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "ideal-goggles/ideal-goggles.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ideal-goggles/Preview Content\"";
@@ -321,8 +329,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pjb.den.ideal-goggles";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pjb.den.temp-pjb";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -334,6 +343,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "ideal-goggles/ideal-goggles.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ideal-goggles/Preview Content\"";
@@ -350,8 +361,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pjb.den.ideal-goggles";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pjb.den.temp-pjb";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

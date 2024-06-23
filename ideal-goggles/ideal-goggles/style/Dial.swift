@@ -18,6 +18,7 @@ struct Dial: View {
     
     @State private var value: CGFloat = 0
     @Binding var dialValue: CGFloat
+    @Binding var celsius: Bool
     
     private var innerScale: CGFloat {
         return scale - indicatorLength
@@ -66,13 +67,15 @@ struct Dial: View {
                 .rotationEffect(.degrees(-90))
                 .frame(width: 250, height: 250, alignment: .center)
             VStack{
-                Text("\(self.value * self.maxTemperature, specifier: "%.0f")")
+                Text("\(self.value * self.maxTemperature, specifier: "%.0f")°")
                     .font(.largeTitle)
                     .foregroundColor(.white)
                     .fontWeight(.semibold)
-                Text("°F")
+                celsius ?
+                Text("Celsius")
+                    .foregroundColor(.white) :
+                Text("Fahrenheit")
                     .foregroundColor(.white)
-
             }
         }
         .onAppear(perform: {

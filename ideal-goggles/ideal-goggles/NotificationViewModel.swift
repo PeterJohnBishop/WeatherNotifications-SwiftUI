@@ -10,23 +10,9 @@ import Observation
 import MapKit
 
 @Observable class NotificationView {
-    var notif: NotificationData = NotificationData(id: UUID().uuidString, name: "", temp: 0.0, long: 0.0, lat: 0.0, address: "", celcius: false, active: false, alert: false)
+    var notif: NotificationData = NotificationData(id: UUID().uuidString, name: "", temp: 0.0, long: -104.9903, lat: 39.7392, address: "", celcius: false, active: false, alert: false)
     var notifs: [NotificationData] = []
     var message: String = ""
-    
-    func convertTemp() {
-        if(self.notif.celcius == false) {
-            let f = self.notif.temp
-            self.notif.temp = (f-32)*(5/9)
-            self.notif.celcius = true
-        } else {
-            let c = self.notif.temp
-            self.notif.temp = (c*(9/5))+32
-            self.notif.celcius = false
-        }
-    }
-    
-    
     
     func forwardGeocoding() {
             let geocoder = CLGeocoder()
@@ -65,7 +51,9 @@ import MapKit
                 
                 if let placemarks = placemarks, let placemark = placemarks.first {
                     print(placemarks)
-                    self.notif.address = String("\(placemark.thoroughfare ?? ""), \(placemark.subThoroughfare ?? ""), \(placemark.locality ?? ""), \(placemark.subLocality ?? ""), \(placemark.administrativeArea ?? ""), \(placemark.subAdministrativeArea ?? ""), \(placemark.postalCode ?? "")")
+//                    self.notif.address = String("\(placemark.thoroughfare ?? ""), \(placemark.subThoroughfare ?? ""), \(placemark.locality ?? ""), \(placemark.subLocality ?? ""), \(placemark.administrativeArea ?? ""), \(placemark.subAdministrativeArea ?? ""), \(placemark.postalCode ?? "")")
+                    self.notif.address = String("\(placemark.locality ?? ""), \(placemark.administrativeArea ?? "") \(placemark.postalCode ?? "")")
+
                 }
                 else
                 {
