@@ -2,6 +2,8 @@
 
 An app to create alarms when the current temperature reaches a selected temp!  
 
+![basic_demo](https://github.com/Pierre81385/ideal-goggles-swiftui/blob/main/assets/basic_demo.gif?raw=true)
+
 # whats cool
 
 - Uses SwiftData to store multiple notifications
