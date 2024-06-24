@@ -28,15 +28,16 @@ struct DialView: View {
         GeometryReader { geometry in
             VStack {
                 VStack(spacing: 12) {
-                    Spacer()
+                    Spacer().padding()
 
                             Image(systemName: weatherManager.icon)
                                 .font(.largeTitle)
                                 .shadow(radius: 2)
-                                .padding()
                     notificationViewModel.notif.celcius ?
-                    Text("Currently, \(weatherManager.temperatureC) in").fontWeight(.bold) :
-                    Text("Currently, \(weatherManager.temperatureF) in").fontWeight(.bold)
+                    Text("Currently, \(weatherManager.temperatureC) in").fontWeight(.regular) :
+                    Text("Currently, \(weatherManager.temperatureF) in").fontWeight(.regular)
+                    Text(notificationViewModel.notif.address).fontWeight(.ultraLight)
+                    Spacer()
                     ScrollView(.horizontal) {
                         HStack(spacing: 30){
                             ForEach(weatherManager.hourlyForecast, id: \.date){
@@ -47,21 +48,20 @@ struct DialView: View {
                                     let temp = hour.temperature.converted(to: .fahrenheit).value
                                     Text(String("\(Int(temp))° F"))
                                     HStack{
-                                        calendar.component(.hour, from: hour.date) == calendar.component(.hour, from: Date.now) ? Text(" Now") :
+                                        calendar.component(.hour, from: hour.date) == calendar.component(.hour, from: Date.now) ? Text(" Now").fontWeight(.bold) :
                                         calendar.component(.hour, from: hour.date) == 0 ?
-                                        Text(String(describing: calendar.component(.hour, from: hour.date) + 12)) :
+                                        Text(String(describing: calendar.component(.hour, from: hour.date) + 12)).fontWeight(.light) :
                                         calendar.component(.hour, from: hour.date) <= 12 ?
                                         Text(String(describing: calendar.component(.hour, from: hour.date))) :
                                         Text(String(describing: calendar.component(.hour, from: hour.date) - 12))
                                         calendar.component(.hour, from: hour.date) == calendar.component(.hour, from: Date.now) ? Text("") :
                                         calendar.component(.hour, from: hour.date) < 12 ? Text("am") : Text("pm")
                                     }
-                                    Text("\(String(describing: calendar.component(.month, from: hour.date))) / \(String(describing: calendar.component(.day, from: hour.date)))")
+                                    Text("\(String(describing: calendar.component(.month, from: hour.date))) / \(String(describing: calendar.component(.day, from: hour.date)))").fontWeight(.ultraLight)
                                 }
                             }
                         }
                     }
-                    Text(notificationViewModel.notif.address).fontWeight(.ultraLight)
                         }
                         .onAppear {
                             let location = locationManager.requestLocation()
@@ -94,109 +94,61 @@ struct DialView: View {
                         }
                     })
                 }.padding()
-                Button(action: {
-                    let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false)
-                    modelContext.insert(save)
-                }, label: {
-                    HStack{
-                        Text("+")
-                        Image(systemName: "bell.circle.fill")
-                    }
-                }).buttonStyle(NeumorphicButton(shape: RoundedRectangle(cornerRadius: 10)))
-                    .padding()
-                if(allNotifs.isEmpty)
-                {
-                    VStack{
-                        Text("")
-                        Spacer()
-                    }
-                } else {
-                    GroupBox(content: {
-                        ScrollView {
-                            ForEach(allNotifs) { notif in
-                                VStack(alignment: .leading) {
-                                    GroupBox(content: {
-                                        HStack{
-                                            Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                                                notif.active ?
-                                                Image(systemName: "bell.badge.fill").tint(.black) :
-                                                Image(systemName: "bell.slash.fill").tint(.black)
-                                            })
-                                            Text(notif.address).fontWeight(.ultraLight)
-                                            Spacer()
-                                        }
-                                    }, label: {
-                                        HStack{
-                                            notificationViewModel.notif.celcius ?
-                                            Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° C") :
-                                            Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° F")
-                                            Spacer()
-                                            Button(action: {
-                                                modelContext.delete(notif)
-                                            }, label: {
-                                                Image(systemName: "minus").tint(.black)
-                                            })
-                                        }
-                                    })
-                                }.padding()
-                                
-                                
-                            }
-                        }
+                HStack{
+                    Button(action: {
+                        let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false)
+                        modelContext.insert(save)
                     }, label: {
                         HStack{
-                            Spacer()
+                            Text("+")
+                            Image(systemName: "bell.circle.fill")
+                        }
+                    }).buttonStyle(NeumorphicButton(shape: RoundedRectangle(cornerRadius: 10)))
+                        .padding()
+                    Button(action: {
+                        notifSheetList = true
+                    }, label: {
+                        Image(systemName: "list.bullet").tint(.black)
+                    }).sheet(isPresented: $notifSheetList, content: {
+                        VStack{
                             Button(action: {
-                                notifSheetList = true
+                                notifSheetList = false
                             }, label: {
-                                Image(systemName: "list.bullet").tint(.black)
-                            }).sheet(isPresented: $notifSheetList, content: {
-                                VStack{
-                                    Button(action: {
-                                        notifSheetList = false
-                                    }, label: {
-                                        Image(systemName: "chevron.down").tint(.black)
-                                            .padding()
-                                    })
-                                    ScrollView {
-                                        ForEach(allNotifs) { notif in
-                                            VStack(alignment: .leading) {
-                                                GroupBox(content: {
-                                                    HStack{
-                                                        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                                                            notif.active ?
-                                                            Image(systemName: "bell.badge.fill").tint(.black) :
-                                                            Image(systemName: "bell.slash.fill").tint(.black)
-                                                        })
-                                                        Text(notif.address).fontWeight(.ultraLight)
-                                                        Spacer()
-                                                    }
-                                                }, label: {
-                                                    HStack{
-                                                        notificationViewModel.notif.celcius ?
-                                                        Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° C") :
-                                                        Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° F")
-                                                        Spacer()
-                                                        Button(action: {
-                                                            modelContext.delete(notif)
-                                                        }, label: {
-                                                            Image(systemName: "minus").tint(.black)
-                                                        })
-                                                    }
-                                                })
-                                            }.padding()
-                                        }
-                                    }
-                                }
+                                Image(systemName: "chevron.down").tint(.black)
+                                    .padding()
                             })
+                            ScrollView {
+                                ForEach(allNotifs) { notif in
+                                    VStack(alignment: .leading) {
+                                        GroupBox(content: {
+                                            HStack{
+                                                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                                                    notif.active ?
+                                                    Image(systemName: "bell.badge.fill").tint(.black) :
+                                                    Image(systemName: "bell.slash.fill").tint(.black)
+                                                })
+                                                Text(notif.address).fontWeight(.ultraLight)
+                                                Spacer()
+                                            }
+                                        }, label: {
+                                            HStack{
+                                                notificationViewModel.notif.celcius ?
+                                                Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° C") :
+                                                Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° F")
+                                                Spacer()
+                                                Button(action: {
+                                                    modelContext.delete(notif)
+                                                }, label: {
+                                                    Image(systemName: "minus").tint(.black)
+                                                })
+                                            }
+                                        })
+                                    }.padding()
+                                }
+                            }
                         }
                     })
-                    .clipShape(RoundedRectangle(cornerSize: CGSize(width: 20, height: 20)))
                 }
-
-          
-                
-//
             }
         }
         .onAppear {
