@@ -37,6 +37,30 @@ struct DialView: View {
                     notificationViewModel.notif.celcius ?
                     Text("Currently, \(weatherManager.temperatureC) in").fontWeight(.bold) :
                     Text("Currently, \(weatherManager.temperatureF) in").fontWeight(.bold)
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 30){
+                            ForEach(weatherManager.hourlyForecast, id: \.date){
+                                hour in
+                                VStack{
+                                    let calendar = Calendar.current
+                                    Image(systemName: hour.symbolName)
+                                    let temp = hour.temperature.converted(to: .fahrenheit).value
+                                    Text(String("\(Int(temp))° F"))
+                                    HStack{
+                                        calendar.component(.hour, from: hour.date) == calendar.component(.hour, from: Date.now) ? Text(" Now") :
+                                        calendar.component(.hour, from: hour.date) == 0 ?
+                                        Text(String(describing: calendar.component(.hour, from: hour.date) + 12)) :
+                                        calendar.component(.hour, from: hour.date) <= 12 ?
+                                        Text(String(describing: calendar.component(.hour, from: hour.date))) :
+                                        Text(String(describing: calendar.component(.hour, from: hour.date) - 12))
+                                        calendar.component(.hour, from: hour.date) == calendar.component(.hour, from: Date.now) ? Text("") :
+                                        calendar.component(.hour, from: hour.date) < 12 ? Text("am") : Text("pm")
+                                    }
+                                    Text("\(String(describing: calendar.component(.month, from: hour.date))) / \(String(describing: calendar.component(.day, from: hour.date)))")
+                                }
+                            }
+                        }
+                    }
                     Text(notificationViewModel.notif.address).fontWeight(.ultraLight)
                         }
                         .onAppear {

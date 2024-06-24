@@ -11,17 +11,21 @@ import WeatherKit
 @Observable class WeatherManager {
     private let weatherService = WeatherService()
     var weather: Weather?
+    var hourlyForecast: [HourWeather] = []
     
-    func getWeather(lat: Double, long: Double) async {
+        func getWeather(lat: Double, long: Double) async {
             do {
                 weather = try await Task.detached(priority: .userInitiated) { [weak self] in
                     return try await self?.weatherService.weather(for: .init(latitude: lat, longitude: long))
                 }.value
                 
+                hourlyForecast = (weather?.hourlyForecast.forecast)!
             } catch {
                 print("Failed to get weather data. \(error)")
             }
         }
+    
+    
 
         var icon: String {
             guard let iconName = weather?.currentWeather.symbolName else { return "--" }
@@ -36,13 +40,13 @@ import WeatherKit
             return String(Int(convert)) + "C"
         }
     
-    var temperatureF: String {
-        guard let temp = weather?.currentWeather.temperature else { return "--" }
-        let convert = temp.converted(to: .fahrenheit).value
+        var temperatureF: String {
+            guard let temp = weather?.currentWeather.temperature else { return "--" }
+            let convert = temp.converted(to: .fahrenheit).value
         
-        return String(Int(convert)) + "°F"
-    }
-        
+            return String(Int(convert)) + "°F"
+        }
+    
         var humidity: String {
             guard let humidity = weather?.currentWeather.humidity else { return "--" }
             let computedHumidity = humidity * 100
