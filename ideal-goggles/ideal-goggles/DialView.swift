@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import MapKit
+import UserNotifications
 
 struct DialView: View {
     @Query var allNotifs: [NotificationData]
@@ -22,6 +23,7 @@ struct DialView: View {
     @State var toggleC: Bool = false;
     @State var statusColor: Color = .gray.opacity(0.8)
     @State var location: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    
 
    
     var body: some View {
@@ -48,7 +50,12 @@ struct DialView: View {
                                     
                                     VStack{
                                         Image(systemName: hour.symbolName)
-                                        let temp = hour.temperature.converted(to: .fahrenheit).value
+                                        
+                                        let temp = notificationViewModel.notif.celcius ?
+                                        hour.temperature.converted(to: .celsius).value :
+                                        hour.temperature.converted(to: .fahrenheit).value
+                                        notificationViewModel.notif.celcius ?
+                                        Text(String("\(Int(temp))° C")) :
                                         Text(String("\(Int(temp))° F"))
                                         HStack{
                                             calendar.component(.hour, from: hour.date) == calendar.component(.hour, from: Date.now) ? Text(" Now").fontWeight(.bold) :
@@ -78,6 +85,11 @@ struct DialView: View {
                                                                 long: notificationViewModel.notif.long)
                             }
                         }
+                    Toggle(isOn:
+                            $notificationViewModel.notif.celcius
+                           , label: {
+                        notificationViewModel.notif.celcius ? Text("Celsius") : Text("Fahrenheit")
+                    }).tint(.black)
                     ZStack {
                     Background(isPressed: false, shape: Circle()).frame(width: 300, height: 300)
                     GlowTile_Circular(ringColor: statusColor)
@@ -100,9 +112,13 @@ struct DialView: View {
                     })
                 }.padding()
                 HStack{
+                    Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                        Text("    ")
+                    })
                     Button(action: {
                         let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false)
                         modelContext.insert(save)
+                        
                     }, label: {
                         HStack{
                             Text("+")
@@ -137,7 +153,7 @@ struct DialView: View {
                                             }
                                         }, label: {
                                             HStack{
-                                                notificationViewModel.notif.celcius ?
+                                                notif.celcius ?
                                                 Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° C") :
                                                 Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° F")
                                                 Spacer()
