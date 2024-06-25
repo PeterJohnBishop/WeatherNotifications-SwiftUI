@@ -32,35 +32,40 @@ struct DialView: View {
 
                             Image(systemName: weatherManager.icon)
                                 .font(.largeTitle)
-                                .shadow(radius: 2)
+                                
+                        
                     notificationViewModel.notif.celcius ?
                     Text("Currently, \(weatherManager.temperatureC) in").fontWeight(.regular) :
                     Text("Currently, \(weatherManager.temperatureF) in").fontWeight(.regular)
                     Text(notificationViewModel.notif.address).fontWeight(.ultraLight)
                     Spacer()
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 30){
-                            ForEach(weatherManager.hourlyForecast, id: \.date){
-                                hour in
-                                VStack{
+                    ScrollViewReader { value in
+                        ScrollView(.horizontal) {
+                            HStack(spacing: 30){
+                                ForEach(weatherManager.hourlyForecast, id: \.date){
+                                    hour in
                                     let calendar = Calendar.current
-                                    Image(systemName: hour.symbolName)
-                                    let temp = hour.temperature.converted(to: .fahrenheit).value
-                                    Text(String("\(Int(temp))° F"))
-                                    HStack{
-                                        calendar.component(.hour, from: hour.date) == calendar.component(.hour, from: Date.now) ? Text(" Now").fontWeight(.bold) :
-                                        calendar.component(.hour, from: hour.date) == 0 ?
-                                        Text(String(describing: calendar.component(.hour, from: hour.date) + 12)).fontWeight(.light) :
-                                        calendar.component(.hour, from: hour.date) <= 12 ?
-                                        Text(String(describing: calendar.component(.hour, from: hour.date))) :
-                                        Text(String(describing: calendar.component(.hour, from: hour.date) - 12))
-                                        calendar.component(.hour, from: hour.date) == calendar.component(.hour, from: Date.now) ? Text("") :
-                                        calendar.component(.hour, from: hour.date) < 12 ? Text("am") : Text("pm")
+                                    
+                                    VStack{
+                                        Image(systemName: hour.symbolName)
+                                        let temp = hour.temperature.converted(to: .fahrenheit).value
+                                        Text(String("\(Int(temp))° F"))
+                                        HStack{
+                                            calendar.component(.hour, from: hour.date) == calendar.component(.hour, from: Date.now) ? Text(" Now").fontWeight(.bold) :
+                                            calendar.component(.hour, from: hour.date) == 0 ?
+                                            Text(String(describing: calendar.component(.hour, from: hour.date) + 12)).fontWeight(.light) :
+                                            calendar.component(.hour, from: hour.date) <= 12 ?
+                                            Text(String(describing: calendar.component(.hour, from: hour.date))) :
+                                            Text(String(describing: calendar.component(.hour, from: hour.date) - 12))
+                                            calendar.component(.hour, from: hour.date) == calendar.component(.hour, from: Date.now) ? Text("") :
+                                            calendar.component(.hour, from: hour.date) < 12 ? Text("am") : Text("pm")
+                                        }
+                                        Text("\(String(describing: calendar.component(.month, from: hour.date))) / \(String(describing: calendar.component(.day, from: hour.date)))").fontWeight(.ultraLight)
                                     }
-                                    Text("\(String(describing: calendar.component(.month, from: hour.date))) / \(String(describing: calendar.component(.day, from: hour.date)))").fontWeight(.ultraLight)
                                 }
                             }
-                        }
+                        }.NeumorphicStyle()
+                            
                     }
                         }
                         .onAppear {
