@@ -23,8 +23,8 @@ struct Dial: View {
     private var innerScale: CGFloat {
         return scale - indicatorLength
     }
-    
-//    init(temperature: CGFloat, dialValue: Double) {
+//    
+//    init(dialValue: Double) {
 //        self.initialTemperature = temperature
 //    }
     
