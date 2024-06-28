@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import MapKit
 import UserNotifications
+import WeatherKit
 
 struct DialView: View {
     @Query var allNotifs: [NotificationData]
@@ -61,7 +62,19 @@ struct DialView: View {
                                     dialColor()
                             })
                             Button(action: {
-                                createPushNotif()
+                                let temp = weatherManager.hourlyForecast.first(where: {
+                                    Int($0.temperature.converted(to: .fahrenheit).value) == Int((dialValue * 120)/100) && $0.date > Date.now
+                                })
+                                //timezone returned in GMT!!!!!
+                                print("\(String(describing: temp?.date)) \(Int((((temp?.temperature.converted(to: .fahrenheit).value ?? 0.0)))))")
+                                print(String(describing: temp?.date.timeIntervalSinceNow))
+                                let content = UNMutableNotificationContent()
+                                content.title = "Feed the cat"
+                                content.subtitle = "It looks hungry"
+                                content.sound = UNNotificationSound.default
+                                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: temp?.date.timeIntervalSinceNow ?? 0.0, repeats: false) //needs a user facing indicator for this time!!!
+                                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+                                UNUserNotificationCenter.current().add(request)
                                 let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false)
                                 modelContext.insert(save)
                             }, label: {
@@ -148,17 +161,6 @@ struct DialView: View {
         }
     }
     
-    func createPushNotif() {
-        let temp = weatherManager.hourlyForecast.first(where: { Int($0.temperature.converted(to: .fahrenheit).value) == Int((dialValue * 120)/100) && calendar.component(.hour, from: $0.date) >= calendar.component(.hour, from: Date.now)})
-        print("\(String(describing: temp?.date)) \(Int((temp?.temperature.converted(to: .fahrenheit).value)!))")
-        let content = UNMutableNotificationContent()
-        content.title = "Feed the cat"
-        content.subtitle = "It looks hungry"
-        content.sound = UNNotificationSound.default
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request)
-    }
 }
 
 #Preview {
