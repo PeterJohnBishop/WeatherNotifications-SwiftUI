@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B12952BF2C2E2C9300BAF2AA /* CurrentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12952BE2C2E2C9300BAF2AA /* CurrentView.swift */; };
+		B12952C12C2E30F000BAF2AA /* HourlyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12952C02C2E30F000BAF2AA /* HourlyView.swift */; };
 		B149B8FA2C1FF30F00B838FF /* DialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B8F92C1FF30F00B838FF /* DialView.swift */; };
 		B149B8FC2C1FF44F00B838FF /* NeumorphicStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B8FB2C1FF44F00B838FF /* NeumorphicStyle.swift */; };
 		B149B9042C2645CD00B838FF /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149B9032C2645CD00B838FF /* LocationManager.swift */; };
@@ -22,6 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B12952BE2C2E2C9300BAF2AA /* CurrentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentView.swift; sourceTree = "<group>"; };
+		B12952C02C2E30F000BAF2AA /* HourlyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyView.swift; sourceTree = "<group>"; };
 		B149B8F92C1FF30F00B838FF /* DialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialView.swift; sourceTree = "<group>"; };
 		B149B8FB2C1FF44F00B838FF /* NeumorphicStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeumorphicStyle.swift; sourceTree = "<group>"; };
 		B149B9032C2645CD00B838FF /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -85,6 +89,8 @@
 				B149B9062C264AB900B838FF /* NotificationDataModel.swift */,
 				B149B9082C264B2C00B838FF /* NotificationViewModel.swift */,
 				B149B8F92C1FF30F00B838FF /* DialView.swift */,
+				B12952C02C2E30F000BAF2AA /* HourlyView.swift */,
+				B12952BE2C2E2C9300BAF2AA /* CurrentView.swift */,
 				B149B90E2C28654100B838FF /* WeatherManager.swift */,
 				B149B9052C26486D00B838FF /* style */,
 				B1D62AE42C1EAF3900CD3818 /* Assets.xcassets */,
@@ -175,10 +181,12 @@
 				B149B8FA2C1FF30F00B838FF /* DialView.swift in Sources */,
 				B149B90F2C28654100B838FF /* WeatherManager.swift in Sources */,
 				B1D62AE32C1EAF3800CD3818 /* ContentView.swift in Sources */,
+				B12952BF2C2E2C9300BAF2AA /* CurrentView.swift in Sources */,
 				B149B90B2C27E2EB00B838FF /* CircularGlow.swift in Sources */,
 				B149B90D2C27E32800B838FF /* Dial.swift in Sources */,
 				B149B9042C2645CD00B838FF /* LocationManager.swift in Sources */,
 				B149B9092C264B2C00B838FF /* NotificationViewModel.swift in Sources */,
+				B12952C12C2E30F000BAF2AA /* HourlyView.swift in Sources */,
 				B1D62AE12C1EAF3800CD3818 /* ideal_gogglesApp.swift in Sources */,
 				B149B8FC2C1FF44F00B838FF /* NeumorphicStyle.swift in Sources */,
 			);
