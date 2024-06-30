@@ -53,8 +53,9 @@ struct DialView: View {
                     Toggle(isOn:
                             $notificationViewModel.notif.celcius
                            , label: {
-                        notificationViewModel.notif.celcius ? Text("Celsius").fontWeight(.light) : Text("Fahrenheit").fontWeight(.light)
+                            notificationViewModel.notif.celcius ? Text("Celsius").fontWeight(.light) : Text("Fahrenheit").fontWeight(.light)
                     }).tint(.black)
+                    
                     //Temperature Selection Dial
                     ZStack {
                             Background(isPressed: false, shape: Circle()).frame(width: 300, height: 300)

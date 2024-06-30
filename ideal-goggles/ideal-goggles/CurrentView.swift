@@ -14,14 +14,16 @@ struct CurrentView: View {
     @Binding var address: String
 
     var body: some View {
-        VStack{
-            Image(systemName: weather?.currentWeather.symbolName ?? "sun.min")
-                .font(.largeTitle)
-            celsius ?
-            Text("Currently, \(String(Int(weather?.currentWeather.temperature.converted(to: .celsius).value ?? 0)))° C in").fontWeight(.regular) :
-            Text("Currently, \(String(Int(weather?.currentWeather.temperature.converted(to: .fahrenheit).value ?? 0)))° F in").fontWeight(.regular)
-            Text(address).fontWeight(.ultraLight)
-        }
+                    
+            VStack{
+                Image(systemName: weather?.currentWeather.symbolName ?? "sun.min")
+                    .font(.largeTitle)
+                celsius ?
+                Text("Currently, \(String(Int(weather?.currentWeather.temperature.converted(to: .celsius).value ?? 0)))° C in").fontWeight(.regular) :
+                Text("Currently, \(String(Int(weather?.currentWeather.temperature.converted(to: .fahrenheit).value ?? 0)))° F in").fontWeight(.regular)
+                Text(address).fontWeight(.ultraLight)
+            }
+        
     }
 }
 
