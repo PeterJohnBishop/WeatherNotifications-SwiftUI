@@ -55,6 +55,53 @@ struct DialView: View {
                            , label: {
                             notificationViewModel.notif.celcius ? Text("Celsius").fontWeight(.light) : Text("Fahrenheit").fontWeight(.light)
                     }).tint(.black)
+                
+                //Notification List
+                Button(action: {
+                    notifSheetList = true
+                }, label: {
+                    Image(systemName: "list.bullet").tint(.black)
+                }).buttonStyle(NeumorphicButton(shape: RoundedRectangle(cornerRadius: 10)))
+                .sheet(isPresented: $notifSheetList, content: {
+                    VStack{
+                        Button(action: {
+                            notifSheetList = false
+                        }, label: {
+                            Image(systemName: "chevron.down").tint(.black)
+                                .padding()
+                        })
+                        ScrollView {
+                            ForEach(allNotifs) { notif in
+                                VStack(alignment: .leading) {
+                                    GroupBox(content: {
+                                        VStack{
+                                            HStack{
+                                                Text("Expected \(notif.date)").fontWeight(.light)
+                                                Spacer()
+                                            }
+                                            HStack{
+                                                Text(notif.address).fontWeight(.ultraLight)
+                                                Spacer()
+                                            }
+                                        }
+                                    }, label: {
+                                        HStack{
+                                            notif.celcius ?
+                                            Text("Notify at \((((notif.temp * 120)/100) - 32)*(5/9), specifier: "%.0f")° C") :
+                                            Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° F")
+                                            Spacer()
+                                            Button(action: {
+                                                modelContext.delete(notif)
+                                            }, label: {
+                                                Image(systemName: "x.circle.fill").tint(.black)
+                                            })
+                                            }
+                                        })
+                                    }.padding()
+                                }
+                            }
+                        }
+                    })
                     
                     //Temperature Selection Dial
                     ZStack {
@@ -63,76 +110,31 @@ struct DialView: View {
                                 Dial(dialValue: $dialValue, celsius: $notificationViewModel.notif.celcius).onChange(of: dialValue, {
                                     dialColor()
                             })
-                            Button(action: {
-                                if let temp = weatherManager.hourlyForecast.first(where: {
-                                    Int($0.temperature.converted(to: .fahrenheit).value) == Int((dialValue * 120)/100) && $0.date > Date.now
-                                }) {
-                                    let content = UNMutableNotificationContent()
-                                    content.title = "Temperature Alert"
-                                    content.subtitle = notificationViewModel.notif.celcius ? "THe outside temperatrue is near \((dialValue - 32)*(5/9))° C" : "The outside temperature is near \(dialValue)° F"
-                                    content.sound = UNNotificationSound.default
-                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: temp.date.timeIntervalSinceNow, repeats: false) //needs a user facing indicator for this time!!!
-                                    let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                                    UNUserNotificationCenter.current().add(request)
-                                    let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false, date: temp.date)
-                                    modelContext.insert(save)
-                                    notifSheetList = true
-                                } else {
-                                    noTemp = true
-                                }
-                            }, label: {
-                                Image(systemName: "plus.circle.fill").tint(.white)
-                            }).padding(EdgeInsets(top: 115, leading: 0, bottom: 0, trailing: 0))
-                            .alert(isPresented: $noTemp) {
-                                        Alert(title: Text("Oops!"), message: Text("The selected temperature is not forecast in the near future."), dismissButton: .default(Text("Got it!")))
-                                    }
                         }.padding()
-                    //Notification List
-                    Button(action: {
+                Button(action: {
+                    if let temp = weatherManager.hourlyForecast.first(where: {
+                        Int($0.temperature.converted(to: .fahrenheit).value) == Int((dialValue * 120)/100) && $0.date > Date.now
+                    }) {
+                        let content = UNMutableNotificationContent()
+                        content.title = "Temperature Alert"
+                        content.subtitle = notificationViewModel.notif.celcius ? "THe outside temperatrue is near \((dialValue - 32)*(5/9))° C" : "The outside temperature is near \(dialValue)° F"
+                        content.sound = UNNotificationSound.default
+                        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: temp.date.timeIntervalSinceNow, repeats: false) //needs a user facing indicator for this time!!!
+                        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+                        UNUserNotificationCenter.current().add(request)
+                        let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false, date: temp.date)
+                        modelContext.insert(save)
                         notifSheetList = true
-                    }, label: {
-                        Image(systemName: "list.bullet").tint(.black)
-                    }).buttonStyle(NeumorphicButton(shape: RoundedRectangle(cornerRadius: 10)))
-                    .sheet(isPresented: $notifSheetList, content: {
-                        VStack{
-                            Button(action: {
-                                notifSheetList = false
-                            }, label: {
-                                Image(systemName: "chevron.down").tint(.black)
-                                    .padding()
-                            })
-                            ScrollView {
-                                ForEach(allNotifs) { notif in
-                                    VStack(alignment: .leading) {
-                                        GroupBox(content: {
-                                            VStack{
-                                                HStack{
-                                                    Text("Expected \(notif.date)").fontWeight(.light)
-                                                    Spacer()
-                                                }
-                                                HStack{
-                                                    Text(notif.address).fontWeight(.ultraLight)
-                                                    Spacer()
-                                                }
-                                            }
-                                        }, label: {
-                                            HStack{
-                                                notif.celcius ?
-                                                Text("Notify at \((((notif.temp * 120)/100) - 32)*(5/9), specifier: "%.0f")° C") :
-                                                Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° F")
-                                                Spacer()
-                                                Button(action: {
-                                                    modelContext.delete(notif)
-                                                }, label: {
-                                                    Image(systemName: "x.circle.fill").tint(.black)
-                                                })
-                                                }
-                                            })
-                                        }.padding()
-                                    }
-                                }
-                            }
-                        })
+                    } else {
+                        noTemp = true
+                    }
+                }, label: {
+                    Image(systemName: "plus.circle.fill").tint(.black)
+                })
+                .alert(isPresented: $noTemp) {
+                            Alert(title: Text("Oops!"), message: Text("The selected temperature is not forecast in the near future."), dismissButton: .default(Text("Got it!")))
+                        }
+                    
                 
             }.padding()
         }.onAppear {
