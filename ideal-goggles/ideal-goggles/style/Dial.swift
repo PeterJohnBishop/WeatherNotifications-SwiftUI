@@ -10,10 +10,10 @@ import SwiftUI
 
 struct Dial: View {
     
-    private let initialTemperature: CGFloat = 0
+    @State private var initialTemperature: CGFloat = 0
     private let scale: CGFloat = 290
     private let indicatorLength: CGFloat = 5
-    private let maxTemperature: CGFloat = 120
+    @State private var maxTemperature: CGFloat = 120
     private let stepSize: CGFloat = 0.5
     
     @State private var value: CGFloat = 0
@@ -53,7 +53,9 @@ struct Dial: View {
                 let ending = CGPoint(x: x, y: y)
                 let start = CGPoint(x: (self.innerScale) / 2, y: (self.innerScale) / 2)
                 let angle = self.angle(between: start, ending: ending)
-                self.value = CGFloat(Int(((angle / 360) * (self.maxTemperature / self.stepSize)))) / (self.maxTemperature / self.stepSize)
+                    let maxC = ((self.maxTemperature - 32) * 5/9)
+                    self.value = CGFloat(Int(((angle / 360) * (celsius ? maxC : self.maxTemperature / self.stepSize)))) / (celsius ? maxC : self.maxTemperature / self.stepSize)
+                    
                     dialValue = self.value*100
                                     }
                 
@@ -67,6 +69,14 @@ struct Dial: View {
                 .rotationEffect(.degrees(-90))
                 .frame(width: 250, height: 250, alignment: .center)
             VStack{
+                let tempf =  (self.value * self.maxTemperature)
+                let tempC = (tempf - 32)*(5/9)
+                celsius ?
+                Text("\(tempC, specifier: "%.0f")°")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+                    .fontWeight(.semibold)
+                :
                 Text("\(self.value * self.maxTemperature, specifier: "%.0f")°")
                     .font(.largeTitle)
                     .foregroundColor(.white)
