@@ -24,6 +24,7 @@ struct DialView: View {
     @State var toggleC: Bool = false;
     @State var statusColor: Color = .gray.opacity(0.8)
     @State var location: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    @State private var noTemp: Bool = false
     let calendar = Calendar.current
    
     var body: some View {
@@ -62,24 +63,28 @@ struct DialView: View {
                                     dialColor()
                             })
                             Button(action: {
-                                let temp = weatherManager.hourlyForecast.first(where: {
+                                if let temp = weatherManager.hourlyForecast.first(where: {
                                     Int($0.temperature.converted(to: .fahrenheit).value) == Int((dialValue * 120)/100) && $0.date > Date.now
-                                })
-                                //timezone returned in GMT!!!!!
-                                print("\(String(describing: temp?.date)) \(Int((((temp?.temperature.converted(to: .fahrenheit).value ?? 0.0)))))")
-                                print(String(describing: temp?.date.timeIntervalSinceNow))
-                                let content = UNMutableNotificationContent()
-                                content.title = "Temperature Alert"
-                                content.subtitle = notificationViewModel.notif.celcius ? "It looks hungry" : "It looks hungry"
-                                content.sound = UNNotificationSound.default
-                                //let trigger = UNTimeIntervalNotificationTrigger(timeInterval: temp?.date.timeIntervalSinceNow ?? 0, repeats: false) //needs a user facing indicator for this time!!!
-                                //let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                                //UNUserNotificationCenter.current().add(request)
-                                let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false)
-                                modelContext.insert(save)
+                                }) {
+                                    let content = UNMutableNotificationContent()
+                                    content.title = "Temperature Alert"
+                                    content.subtitle = notificationViewModel.notif.celcius ? "It looks hungry" : "It looks hungry"
+                                    content.sound = UNNotificationSound.default
+                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: temp.date.timeIntervalSinceNow, repeats: false) //needs a user facing indicator for this time!!!
+                                    let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+                                    UNUserNotificationCenter.current().add(request)
+                                    let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false)
+                                    modelContext.insert(save)
+                                    notifSheetList = true
+                                } else {
+                                    noTemp = true
+                                }
                             }, label: {
                                 Image(systemName: "plus.circle.fill").tint(.white)
                             }).padding(EdgeInsets(top: 115, leading: 0, bottom: 0, trailing: 0))
+                            .alert(isPresented: $noTemp) {
+                                        Alert(title: Text("Oops!"), message: Text("The selected temperature is not forecast in the near future."), dismissButton: .default(Text("Got it!")))
+                                    }
                         }.padding()
                     //Notification List
                     Button(action: {
