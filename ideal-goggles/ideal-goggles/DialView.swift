@@ -68,12 +68,12 @@ struct DialView: View {
                                 }) {
                                     let content = UNMutableNotificationContent()
                                     content.title = "Temperature Alert"
-                                    content.subtitle = notificationViewModel.notif.celcius ? "It looks hungry" : "It looks hungry"
+                                    content.subtitle = notificationViewModel.notif.celcius ? "THe outside temperatrue is near \((dialValue - 32)*(5/9))° C" : "The outside temperature is near \(dialValue)° F"
                                     content.sound = UNNotificationSound.default
                                     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: temp.date.timeIntervalSinceNow, repeats: false) //needs a user facing indicator for this time!!!
                                     let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
                                     UNUserNotificationCenter.current().add(request)
-                                    let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false)
+                                    let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false, date: temp.date)
                                     modelContext.insert(save)
                                     notifSheetList = true
                                 } else {
@@ -104,14 +104,15 @@ struct DialView: View {
                                 ForEach(allNotifs) { notif in
                                     VStack(alignment: .leading) {
                                         GroupBox(content: {
-                                            HStack{
-                                                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                                                    notif.active ?
-                                                    Image(systemName: "bell.badge.fill").tint(.black) :
-                                                    Image(systemName: "bell.slash.fill").tint(.gray)
-                                                })
-                                                Text(notif.address).fontWeight(.ultraLight)
-                                                Spacer()
+                                            VStack{
+                                                HStack{
+                                                    Text("Expected \(notif.date)").fontWeight(.light)
+                                                    Spacer()
+                                                }
+                                                HStack{
+                                                    Text(notif.address).fontWeight(.ultraLight)
+                                                    Spacer()
+                                                }
                                             }
                                         }, label: {
                                             HStack{
@@ -122,7 +123,7 @@ struct DialView: View {
                                                 Button(action: {
                                                     modelContext.delete(notif)
                                                 }, label: {
-                                                    Image(systemName: "minus").tint(.black)
+                                                    Image(systemName: "x.circle.fill").tint(.black)
                                                 })
                                                 }
                                             })

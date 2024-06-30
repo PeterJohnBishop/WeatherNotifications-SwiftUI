@@ -19,8 +19,9 @@ import MapKit
     var celcius: Bool
     var active: Bool
     var alert: Bool
+    var date: Date
     
-    init(id: String, name: String, temp: Double, long: Double, lat: Double, address: String, celcius: Bool, active: Bool, alert: Bool) {
+    init(id: String, name: String, temp: Double, long: Double, lat: Double, address: String, celcius: Bool, active: Bool, alert: Bool, date: Date) {
         self.id = id
         self.name = name
         self.temp = temp
@@ -30,5 +31,6 @@ import MapKit
         self.celcius = celcius
         self.active = active
         self.alert = alert
+        self.date = date
     }
 }

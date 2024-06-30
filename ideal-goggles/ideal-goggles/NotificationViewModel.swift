@@ -10,7 +10,7 @@ import Observation
 import MapKit
 
 @Observable class NotificationView {
-    var notif: NotificationData = NotificationData(id: UUID().uuidString, name: "", temp: 0.0, long: -104.9903, lat: 39.7392, address: "", celcius: false, active: false, alert: false)
+    var notif: NotificationData = NotificationData(id: UUID().uuidString, name: "", temp: 0.0, long: -104.9903, lat: 39.7392, address: "", celcius: false, active: false, alert: false, date: Date.now)
     var notifs: [NotificationData] = []
     var message: String = ""
     
