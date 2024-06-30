@@ -25,6 +25,7 @@ struct DialView: View {
     @State var statusColor: Color = .gray.opacity(0.8)
     @State var location: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     @State private var noTemp: Bool = false
+    @State private var weatherLoading: Bool = false
     let calendar = Calendar.current
    
     var body: some View {
@@ -32,12 +33,17 @@ struct DialView: View {
             VStack {
                     //Weather Forecast
                     VStack(spacing: 12) {
-                                Spacer()
-                                //Current Weather
-                                CurrentView(weather: $weatherManager.weather, celsius: $notificationViewModel.notif.celcius, address: $notificationViewModel.notif.address)
-                                Spacer()
-                                //Hourly Weather
-                                HourlyView(forecast: $weatherManager.hourlyForecast, celsius: $notificationViewModel.notif.celcius)
+                        if(weatherLoading) {
+                            ProgressView()
+                        } else {
+                            Spacer()
+                            //Current Weather
+                            CurrentView(weather: $weatherManager.weather, celsius: $notificationViewModel.notif.celcius, address: $notificationViewModel.notif.address)
+                            Spacer()
+                            //Hourly Weather
+                            HourlyView(forecast: $weatherManager.hourlyForecast, celsius: $notificationViewModel.notif.celcius)
+                        }
+                            
                             }
                             .onAppear {
                                 getWeather()
@@ -117,7 +123,7 @@ struct DialView: View {
                     }) {
                         let content = UNMutableNotificationContent()
                         content.title = "Temperature Alert"
-                        content.subtitle = notificationViewModel.notif.celcius ? "THe outside temperatrue is near \((dialValue - 32)*(5/9))° C" : "The outside temperature is near \(dialValue)° F"
+                        content.subtitle = notificationViewModel.notif.celcius ? "THe outside temperatrue is near \((((dialValue * 120)/100) - 32)*(5/9))° C" : "The outside temperature is near \((dialValue * 120)/100)° F"
                         content.sound = UNNotificationSound.default
                         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: temp.date.timeIntervalSinceNow, repeats: false) //needs a user facing indicator for this time!!!
                         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
@@ -147,6 +153,7 @@ struct DialView: View {
     }
     
     func getWeather() {
+        weatherLoading = true
         let location = locationManager.requestLocation()
         Task {
             notificationViewModel.notif.lat = location.coordinate.latitude
@@ -155,6 +162,7 @@ struct DialView: View {
             await weatherManager.getWeather(lat: notificationViewModel.notif.lat,
                                             long: notificationViewModel.notif.long)
         }
+        weatherLoading = false
     }
     
     func dialColor() {
