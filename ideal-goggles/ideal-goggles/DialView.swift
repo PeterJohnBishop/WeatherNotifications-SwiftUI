@@ -31,7 +31,7 @@ struct DialView: View {
             VStack {
                     //Weather Forecast
                     VStack(spacing: 12) {
-                                Spacer().padding()
+                                Spacer()
                                 //Current Weather
                                 CurrentView(weather: $weatherManager.weather, celsius: $notificationViewModel.notif.celcius, address: $notificationViewModel.notif.address)
                                 Spacer()
@@ -52,7 +52,7 @@ struct DialView: View {
                     Toggle(isOn:
                             $notificationViewModel.notif.celcius
                            , label: {
-                        notificationViewModel.notif.celcius ? Text("Celsius") : Text("Fahrenheit")
+                        notificationViewModel.notif.celcius ? Text("Celsius").fontWeight(.light) : Text("Fahrenheit").fontWeight(.light)
                     }).tint(.black)
                     //Temperature Selection Dial
                     ZStack {
@@ -69,12 +69,12 @@ struct DialView: View {
                                 print("\(String(describing: temp?.date)) \(Int((((temp?.temperature.converted(to: .fahrenheit).value ?? 0.0)))))")
                                 print(String(describing: temp?.date.timeIntervalSinceNow))
                                 let content = UNMutableNotificationContent()
-                                content.title = "Feed the cat"
-                                content.subtitle = "It looks hungry"
+                                content.title = "Temperature Alert"
+                                content.subtitle = notificationViewModel.notif.celcius ? "It looks hungry" : "It looks hungry"
                                 content.sound = UNNotificationSound.default
-                                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: temp?.date.timeIntervalSinceNow ?? 0.0, repeats: false) //needs a user facing indicator for this time!!!
-                                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                                UNUserNotificationCenter.current().add(request)
+                                //let trigger = UNTimeIntervalNotificationTrigger(timeInterval: temp?.date.timeIntervalSinceNow ?? 0, repeats: false) //needs a user facing indicator for this time!!!
+                                //let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+                                //UNUserNotificationCenter.current().add(request)
                                 let save = NotificationData(id: UUID().uuidString, name: "", temp: dialValue, long: notificationViewModel.notif.long, lat: notificationViewModel.notif.lat, address: notificationViewModel.notif.address, celcius: notificationViewModel.notif.celcius, active: true, alert: false)
                                 modelContext.insert(save)
                             }, label: {
@@ -111,7 +111,7 @@ struct DialView: View {
                                         }, label: {
                                             HStack{
                                                 notif.celcius ?
-                                                Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° C") :
+                                                Text("Notify at \((((notif.temp * 120)/100) - 32)*(5/9), specifier: "%.0f")° C") :
                                                 Text("Notify at \((notif.temp * 120)/100, specifier: "%.0f")° F")
                                                 Spacer()
                                                 Button(action: {
@@ -127,13 +127,13 @@ struct DialView: View {
                             }
                         })
                 
-            }
+            }.padding()
         }.onAppear {
             screenWidth = UIScreen.main.bounds.size.width
             screenHeight = UIScreen.main.bounds.size.height
         }
-        .NeumorphicStyle()
-        .ignoresSafeArea()
+//        .NeumorphicStyle()
+//        .ignoresSafeArea()
     
     }
     
