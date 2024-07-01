@@ -25,7 +25,6 @@ struct DialView: View {
     @State var statusColor: Color = .gray.opacity(0.8)
     @State var location: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     @State private var noTemp: Bool = false
-    @State private var weatherLoading: Bool = false
     let calendar = Calendar.current
    
     var body: some View {
@@ -33,16 +32,14 @@ struct DialView: View {
             VStack {
                     //Weather Forecast
                     VStack(spacing: 12) {
-                        if(weatherLoading) {
-                            ProgressView()
-                        } else {
+                       
                             Spacer()
                             //Current Weather
                             CurrentView(weather: $weatherManager.weather, celsius: $notificationViewModel.notif.celcius, address: $notificationViewModel.notif.address)
                             Spacer()
                             //Hourly Weather
                             HourlyView(forecast: $weatherManager.hourlyForecast, celsius: $notificationViewModel.notif.celcius)
-                        }
+                        
                             
                             }
                             .onAppear {
@@ -153,8 +150,7 @@ struct DialView: View {
     }
     
     func getWeather() {
-        weatherLoading = true
-        let location = locationManager.requestLocation()
+        let location = locationManager.requestLocation() 
         Task {
             notificationViewModel.notif.lat = location.coordinate.latitude
             notificationViewModel.notif.long = location.coordinate.longitude
@@ -162,7 +158,6 @@ struct DialView: View {
             await weatherManager.getWeather(lat: notificationViewModel.notif.lat,
                                             long: notificationViewModel.notif.long)
         }
-        weatherLoading = false
     }
     
     func dialColor() {

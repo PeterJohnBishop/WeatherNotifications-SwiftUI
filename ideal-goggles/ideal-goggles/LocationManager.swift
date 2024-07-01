@@ -18,7 +18,6 @@ import CoreLocation
     let manager = CLLocationManager()
     
     func requestLocation() -> CLLocation {
-        authStatus = manager.authorizationStatus
         manager.requestLocation()
         return manager.location!
     }
@@ -34,8 +33,8 @@ import CoreLocation
     override init() {
         super.init()
         manager.delegate = self
-        manager.startUpdatingHeading()
-        manager.requestWhenInUseAuthorization()
+        //manager.startUpdatingHeading()
+        //manager.requestWhenInUseAuthorization()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
