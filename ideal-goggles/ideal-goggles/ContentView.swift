@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import MapKit
+import Foundation
 
 struct ContentView: View {
     @State var ready: Bool = false
