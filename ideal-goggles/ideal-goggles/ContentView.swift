@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 import MapKit
-
+// nicer
 struct ContentView: View {
     @State var ready: Bool = false
     @State var buttonText: String = ""
