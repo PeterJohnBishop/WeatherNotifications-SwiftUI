@@ -1,4 +1,5 @@
-# ideal-goggles-swiftui
+# Weather Notifications for iOS
+### SwiftUI | WeatherKit | SwiftData | MapKit | UserNotifications
 
 An app to create alarms when the current temperature reaches a selected temp!  
 
